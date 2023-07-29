@@ -130,18 +130,18 @@
                 })
                 .catch(err => console.error(err))
         }
-        window.addEventListener("DOMContentLoaded", ()=>{
+        window.addEventListener("DOMContentLoaded", () => {
             axios.get('https://crudcrud.com/api/1b368f0d01a149ffb1f9f3ada8932056/user')
-            .then(res => { 
-                for(let i=0; i<res.data.length; i++){
-                    showuser(res.data[i])
-                    console.log(res.data[i])
-                }
-            })
-            .catch(err => console.error(err))
+                .then(res => {
+                    for (let i = 0; i < res.data.length; i++) {
+                        showuser(res.data[i])
+                        console.log(res.data[i])
+                    }
+                })
+                .catch(err => console.error(err))
 
         })
-        
+
 
         function showuser(user) {
             let listItem = document.createElement('li');
@@ -164,8 +164,29 @@
             var editBtn = document.createElement('button');
             editBtn.className = "edit";
             editBtn.textContent = "Edit" + "    ";
-            deleteBtn.addEventListener('click', removeItem);
-            editBtn.addEventListener('click', editItem);
+            deleteBtn.addEventListener('click', function removeItem(e) {
+                if (e.target.classList.contains('delete')) {
+
+                    var li = e.target.parentElement;
+                    userlist.removeChild(li);
+                    axios.delete('https://crudcrud.com/api/1b368f0d01a149ffb1f9f3ada8932056/user' + '/' + user._id)
+                        .then(res => showOutput(res))
+                        .catch(err => console.error(err))
+
+                }
+            });
+            editBtn.addEventListener('click', function editItem(e) {
+                if (e.target.classList.contains('edit')) {
+
+                    var li = e.target.parentElement;
+                    userlist.removeChild(li);
+
+                    document.getElementById('fullname').value = user.name;
+                    document.getElementById('email').value = user.email;
+                    document.getElementById('Date').value = user.date;
+                    document.getElementById('Contact').value = user.contact;
+                }
+            });
             listItem.appendChild(editBtn);
             listItem.appendChild(deleteBtn);
             userlist.appendChild(listItem);
@@ -175,34 +196,6 @@
             document.getElementById('email').value = '';
             document.getElementById('Date').value = '';
             document.getElementById('Contact').value = '';
-        }
-
-
-        function removeItem(e) {
-            if (e.target.classList.contains('delete')) {
-
-                var li = e.target.parentElement;
-                userlist.removeChild(li);
-                localStorage.getItem(newObj.email);
-                localStorage.removeItem(newObj.email);
-
-            }
-        }
-
-        function editItem(e) {
-            if (e.target.classList.contains('edit')) {
-
-                var li = e.target.parentElement;
-                userlist.removeChild(li);
-                localStorage.getItem(newObj.email);
-                localStorage.removeItem(newObj.email);
-                document.getElementById('fullname').value = newObj.name;
-                document.getElementById('email').value = newObj.email;
-                document.getElementById('Date').value = newObj.date;
-                document.getElementById('Contact').value = newObj.contact;
-
-
-            }
         }
 
     </script>
