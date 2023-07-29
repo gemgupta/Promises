@@ -122,22 +122,37 @@
 
             };
 
-            axios.post('https://crudcrud.com/api/d661ce3abcae468eb121d673d110e5db/users', newObj)
-                .then(res => showOutput(res))
-                .catch(err => console.error(err))
-
-            axios.get('https://crudcrud.com/api/d661ce3abcae468eb121d673d110e5db/users')
+            axios.post('https://crudcrud.com/api/1b368f0d01a149ffb1f9f3ada8932056/user', newObj)
                 .then(res => {
-                    for(let i=0; i<res.data.length; i++){
-                        let listItem = document.createElement('li');
+                    console.log(res.data)
+                    showuser(res.data)
+
+                })
+                .catch(err => console.error(err))
+        }
+        window.addEventListener("DOMContentLoaded", ()=>{
+            axios.get('https://crudcrud.com/api/1b368f0d01a149ffb1f9f3ada8932056/user')
+            .then(res => { 
+                for(let i=0; i<res.data.length; i++){
+                    showuser(res.data[i])
+                    console.log(res.data[i])
+                }
+            })
+            .catch(err => console.error(err))
+
+        })
+        
+
+        function showuser(user) {
+            let listItem = document.createElement('li');
             var fullnameText = document.createElement('span');
-            fullnameText.textContent = " " + res.data[i].name;
+            fullnameText.textContent = " " + user.name;
             var emailText = document.createElement('span');
-            emailText.textContent = " " + res.data[i].email;
+            emailText.textContent = " " + user.email;
             var dateText = document.createElement('span');
-            dateText.textContent = " " + res.data[i].date;
+            dateText.textContent = " " + user.date;
             var contactText = document.createElement('span');
-            contactText.textContent = " " + res.data[i].contact;
+            contactText.textContent = " " + user.contact;
             let userlist = document.getElementById('user-list');
             listItem.appendChild(fullnameText);
             listItem.appendChild(emailText);
@@ -150,64 +165,45 @@
             editBtn.className = "edit";
             editBtn.textContent = "Edit" + "    ";
             deleteBtn.addEventListener('click', removeItem);
-
+            editBtn.addEventListener('click', editItem);
             listItem.appendChild(editBtn);
             listItem.appendChild(deleteBtn);
             userlist.appendChild(listItem);
-            
+
 
             document.getElementById('fullname').value = '';
             document.getElementById('email').value = '';
             document.getElementById('Date').value = '';
             document.getElementById('Contact').value = '';
-                    }
-                    
-
-            
-                })
-                .catch(err => console.error(err))
-            //users.push(newObj);
-            //let myObj_serialized = JSON.stringify(newObj);
-            // console.log(myObj_serialized);
-            // localStorage.setItem(newObj.email, JSON.stringify(newObj));
-            
-            // let user = localStorage.getItem(email_serialized);
-
-            
-
-            
-            function removeItem(e) {
-                if (e.target.classList.contains('delete')) {
-
-                    var li = e.target.parentElement;
-                    userlist.removeChild(li);
-                    localStorage.getItem(newObj.email);
-                    localStorage.removeItem(newObj.email);
-
-                }
-            }
-            editBtn.addEventListener('click', editItem);
-            function editItem(e) {
-                if (e.target.classList.contains('edit')) {
-
-                    var li = e.target.parentElement;
-                    userlist.removeChild(li);
-                    localStorage.getItem(newObj.email);
-                    localStorage.removeItem(newObj.email);
-                    document.getElementById('fullname').value = newObj.name;
-                    document.getElementById('email').value = newObj.email;
-                    document.getElementById('Date').value = newObj.date;
-                    document.getElementById('Contact').value = newObj.contact;
-
-
-                }
-            }
-
-            
-
         }
 
 
+        function removeItem(e) {
+            if (e.target.classList.contains('delete')) {
+
+                var li = e.target.parentElement;
+                userlist.removeChild(li);
+                localStorage.getItem(newObj.email);
+                localStorage.removeItem(newObj.email);
+
+            }
+        }
+
+        function editItem(e) {
+            if (e.target.classList.contains('edit')) {
+
+                var li = e.target.parentElement;
+                userlist.removeChild(li);
+                localStorage.getItem(newObj.email);
+                localStorage.removeItem(newObj.email);
+                document.getElementById('fullname').value = newObj.name;
+                document.getElementById('email').value = newObj.email;
+                document.getElementById('Date').value = newObj.date;
+                document.getElementById('Contact').value = newObj.contact;
+
+
+            }
+        }
 
     </script>
 </body>
