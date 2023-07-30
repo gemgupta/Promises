@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+        integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <title>Candy Shop Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .card {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .row {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="number"],
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #af4c4c;
+            color: #fff;
+            border: 4px;
+            cursor: pointer;
+
+        }
+
+        .sell1 {
+            background-color: #888b89;
+            color: #fff;
+            border: 4px;
+            cursor: pointer;
+        }
+
+        .sell2 {
+            background-color: #888b89;
+            color: #fff;
+            border: 4px;
+            cursor: pointer;
+        }
+
+        .sell5 {
+            background-color: #888b89;
+            color: #fff;
+            border: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="main-header" class="bg-success text-white p-5 mb-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-8 align-self-center">
+                    <h1 id="header-title" class="float-md-right">Add And Manage Candies</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div id="main" class="card card-body">
+            <h2 class="title">Register </h2>
+            <form id="addForm" class="form-inline mb-4">
+                <label for="fullname">Candy Name:</label>
+                <input type="text" id="fullname" name="fullname" required>
+
+                <label for="typeOf">Type:</label>
+                <input type="text" id="typeOf" name="typeOf" required>
+
+                <label for="Price">Price:</label>
+                <input type="number" id="Price" name="Price" required>
+
+                <label for="Quantity">Quantity:</label>
+                <input type="number" id="Quantity" name="Quantity" required>
+
+                <input type="submit" class="btn btn-dark" value="Submit">
+            </form>
+
+        </div>
+        <h3>Candy List</h3>
+        <ul id='user-list'></ul>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"> </script>
+    <script>
+        var form = document.getElementById('addForm');
+        var count;
+        // var users = JSON.parse(localStorage.getItem('users')) || [];
+        // Form submit event
+        form.addEventListener('submit', saveItem);
+
+        function saveItem(e) {
+            e.preventDefault();
+            let name = document.getElementById('fullname').value;
+            let Type = document.getElementById('typeOf').value;
+            let Price = document.getElementById('Price').value;
+            let Quantity = document.getElementById('Quantity').value;
+
+            const newObj = {
+                name,
+                Type,
+                Price,
+                Quantity
+
+            };
+
+
+            axios.post('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy', newObj)
+                .then(res => {
+
+                    showuser(res.data)
+
+                })
+                .catch(err => console.error(err))
+
+        }
+        window.addEventListener("DOMContentLoaded", function reload() {
+            axios.get('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy')
+                .then(res => {
+                    for (let i = 0; i < res.data.length; i++) {
+                        showuser(res.data[i])
+                        console.log(res.data[i])
+                    }
+                })
+                .catch(err => console.error(err))
+
+        })
+
+
+        function showuser(user) {
+            let listItem = document.createElement('li');
+            var fullnameText = document.createElement('span');
+            fullnameText.textContent = " " + user.name;
+            var emailText = document.createElement('span');
+            emailText.textContent = " " + user.Type;
+            var dateText = document.createElement('span');
+            dateText.textContent = " " + user.Price + " Rupee";
+            var contactText = document.createElement('span');
+            contactText.textContent = " " + user.Quantity + '  Quantity  left';
+            let userlist = document.getElementById('user-list');
+            listItem.appendChild(fullnameText);
+            listItem.appendChild(emailText);
+            listItem.appendChild(dateText);
+            listItem.appendChild(contactText);
+            var deleteBtn = document.createElement('button');
+            deleteBtn.className = "delete";
+            deleteBtn.textContent = "DeleteCandy";
+            var sellBtn1 = document.createElement('button');
+            sellBtn1.className = "sell1";
+            sellBtn1.textContent = "Sell 1" + "    ";
+            var sellBtn2 = document.createElement('button');
+            sellBtn2.className = "sell2";
+            sellBtn2.textContent = "Sell2" + "    ";
+            var sellBtn5 = document.createElement('button');
+            sellBtn5.className = "sell5";
+            sellBtn5.textContent = "Sell 5" + "    ";
+            deleteBtn.addEventListener('click', function removeItem(e) {
+                if (e.target.classList.contains('delete')) {
+
+                    var li = e.target.parentElement;
+                    userlist.removeChild(li);
+                    axios.delete('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy' + '/' + user._id)
+                        .then(res => showOutput(res))
+                        .catch(err => console.error(err))
+
+                }
+            });
+            sellBtn1.addEventListener('click', function sellItem(e) {
+                if (e.target.classList.contains('sell1') && user.Quantity > 0) {
+
+                    var li = e.target.parentElement;
+                    const obj1 = {
+                        name: user.name,
+                        Type: user.Type,
+                        Price: user.Price,
+                        Quantity: user.Quantity - 1
+                    }
+                    axios.put('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy' + '/' + user._id, obj1)
+                        .then(() => {
+
+                            userlist.removeChild(li);
+                            axios.get('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy')
+                                .then(res => {
+                                    for (let i = 0; i < res.data.length; i++) {
+                                        showuser(res.data[i])
+                                        console.log(res.data[i])
+                                    }
+                                })
+                                .catch(err => console.error(err))
+                        })
+                        .catch(err => console.error(err))
+
+
+
+
+                }
+
+                else {
+                    alert("No Quantity left")
+                }
+            });
+            sellBtn5.addEventListener('click', function sellItem1(e) {
+                if (e.target.classList.contains('sell5') && user.Quantity > 0) {
+
+                    var li = e.target.parentElement;
+                    const obj1 = {
+                        name: user.name,
+                        Type: user.Type,
+                        Price: user.Price,
+                        Quantity: user.Quantity - 5
+                    }
+                    axios.put('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy' + '/' + user._id, obj1)
+                        .then(() => {
+
+                            userlist.removeChild(li);
+                            axios.get('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy')
+                                .then(res => {
+                                    for (let i = 0; i < res.data.length; i++) {
+                                        showuser(res.data[i])
+                                        console.log(res.data[i])
+                                    }
+                                })
+                                .catch(err => console.error(err))
+                        })
+                        .catch(err => console.error(err))
+
+
+
+
+                }
+                else {
+                    alert("No Quantity left")
+                }
+            });
+            sellBtn2.addEventListener('click', function sellItem2(e) {
+                if (e.target.classList.contains('sell2') && user.Quantity > 0) {
+
+                    var li = e.target.parentElement;
+                    const obj1 = {
+                        name: user.name,
+                        Type: user.Type,
+                        Price: user.Price,
+                        Quantity: user.Quantity - 2
+                    }
+                    axios.put('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy' + '/' + user._id, obj1)
+                        .then(() => {
+
+                            userlist.removeChild(li);
+                            axios.get('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy')
+                                .then(res => {
+                                    for (let i = 0; i < res.data.length; i++) {
+                                        showuser(res.data[i])
+                                        console.log(res.data[i])
+                                    }
+                                })
+                                .catch(err => console.error(err))
+                        })
+                        .catch(err => console.error(err))
+
+
+
+
+                }
+
+                else {
+                    alert("No Quantity left")
+                }
+            });
+            listItem.appendChild(sellBtn1);
+            listItem.appendChild(sellBtn2);
+            listItem.appendChild(sellBtn5);
+            listItem.appendChild(deleteBtn);
+            userlist.appendChild(listItem);
+
+
+            document.getElementById('fullname').value = "";
+            document.getElementById('typeOf').value = "";
+            document.getElementById('Price').value = "";
+            document.getElementById('Quantity').value = "";
+        }
+
+    </script>
+</body>
+
+</html>
