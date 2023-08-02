@@ -136,26 +136,30 @@
 
             };
 
-
-            axios.post('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy', newObj)
-                .then(res => {
-
+            const postData = async () => {
+                try {
+                    const res = await axios.post('https://crudcrud.com/api/15952b92a46542b099c63a8253fde85d/candy', newObj)
                     showuser(res.data)
+                }
+                catch (err) {
+                    console.error(err)
+                }
+            }
+            postData();
 
-                })
-                .catch(err => console.error(err))
 
         }
-        window.addEventListener("DOMContentLoaded", function reload() {
-            axios.get('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy')
-                .then(res => {
-                    for (let i = 0; i < res.data.length; i++) {
-                        showuser(res.data[i])
-                        console.log(res.data[i])
-                    }
-                })
-                .catch(err => console.error(err))
-
+        window.addEventListener("DOMContentLoaded", reload = async () => {
+            try {
+                const res = await axios.get('https://crudcrud.com/api/15952b92a46542b099c63a8253fde85d/candy')
+                for (let i = 0; i < res.data.length; i++) {
+                    showuser(res.data[i])
+                    console.log(res.data[i])
+                }
+            }
+            catch (err) {
+                console.error(err)
+            }
         })
 
 
@@ -191,12 +195,20 @@
 
                     var li = e.target.parentElement;
                     userlist.removeChild(li);
-                    axios.delete('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy' + '/' + user._id)
-                        .then(res => showOutput(res))
-                        .catch(err => console.error(err))
+                    const deleteCandy = async () => {
+                        try {
+                            const dele = await axios.delete('https://crudcrud.com/api/15952b92a46542b099c63a8253fde85d/candy' + '/' + user._id)
+                        }
+                        catch (err) {
+                            console.error(err)
+                        }
 
+                    }
+                    deleteCandy();
                 }
+
             });
+
             sellBtn1.addEventListener('click', function sellItem(e) {
                 if (e.target.classList.contains('sell1') && user.Quantity > 0) {
 
@@ -207,32 +219,29 @@
                         Price: user.Price,
                         Quantity: user.Quantity - 1
                     }
-                    axios.put('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy' + '/' + user._id, obj1)
-                        .then(() => {
-
+                    const sellput = async () => {
+                        try {
+                         await axios.put('https://crudcrud.com/api/15952b92a46542b099c63a8253fde85d/candy' + '/' + user._id, obj1)
                             userlist.removeChild(li);
-                            axios.get('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy')
-                                .then(res => {
-                                    for (let i = 0; i < res.data.length; i++) {
-                                        showuser(res.data[i])
-                                        console.log(res.data[i])
-                                    }
-                                })
-                                .catch(err => console.error(err))
-                        })
-                        .catch(err => console.error(err))
+                            try {
+                const res = await axios.get('https://crudcrud.com/api/15952b92a46542b099c63a8253fde85d/candy'+ '/' + user._id, obj1)
+                    showuser(res.data)
+                    console.log(res.data)
+            }
+            catch (err) {
+                console.error(err)
+            }
+                        }
+                        catch (err) {
+                            console.log(err)
+                        }
 
-
-
-
+                    }
+                    sellput()
                 }
-
-                else {
-                    alert("No Quantity left")
-                }
-            });
+            })
             sellBtn5.addEventListener('click', function sellItem1(e) {
-                if (e.target.classList.contains('sell5') && user.Quantity > 0) {
+                if (e.target.classList.contains('sell5') && user.Quantity >= 5) {
 
                     var li = e.target.parentElement;
                     const obj1 = {
@@ -241,31 +250,32 @@
                         Price: user.Price,
                         Quantity: user.Quantity - 5
                     }
-                    axios.put('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy' + '/' + user._id, obj1)
-                        .then(() => {
-
+                    const sellput = async () => {
+                        try {
+                         await axios.put('https://crudcrud.com/api/15952b92a46542b099c63a8253fde85d/candy' + '/' + user._id, obj1)
                             userlist.removeChild(li);
-                            axios.get('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy')
-                                .then(res => {
-                                    for (let i = 0; i < res.data.length; i++) {
-                                        showuser(res.data[i])
-                                        console.log(res.data[i])
-                                    }
-                                })
-                                .catch(err => console.error(err))
-                        })
-                        .catch(err => console.error(err))
+                            try {
+                const res = await axios.get('https://crudcrud.com/api/15952b92a46542b099c63a8253fde85d/candy'+ '/' + user._id, obj1)
+                    showuser(res.data)
+                    console.log(res.data)
+            }
+            catch (err) {
+                console.error(err)
+            }
+                        }
+                        catch (err) {
+                            console.log(err)
+                        }
 
-
-
-
+                    }
+                    sellput()
                 }
                 else {
-                    alert("No Quantity left")
+                    alert("less than 5 quantity left")
                 }
             });
             sellBtn2.addEventListener('click', function sellItem2(e) {
-                if (e.target.classList.contains('sell2') && user.Quantity > 0) {
+                if (e.target.classList.contains('sell2') && user.Quantity >= 2) {
 
                     var li = e.target.parentElement;
                     const obj1 = {
@@ -274,28 +284,28 @@
                         Price: user.Price,
                         Quantity: user.Quantity - 2
                     }
-                    axios.put('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy' + '/' + user._id, obj1)
-                        .then(() => {
-
+                    const sellput = async () => {
+                        try {
+                         await axios.put('https://crudcrud.com/api/15952b92a46542b099c63a8253fde85d/candy' + '/' + user._id, obj1)
                             userlist.removeChild(li);
-                            axios.get('https://crudcrud.com/api/b939594681d94f6fbc11ffe785cbf80c/candy')
-                                .then(res => {
-                                    for (let i = 0; i < res.data.length; i++) {
-                                        showuser(res.data[i])
-                                        console.log(res.data[i])
-                                    }
-                                })
-                                .catch(err => console.error(err))
-                        })
-                        .catch(err => console.error(err))
+                            try {
+                const res = await axios.get('https://crudcrud.com/api/15952b92a46542b099c63a8253fde85d/candy'+ '/' + user._id, obj1)
+                    showuser(res.data)
+                    console.log(res.data)
+            }
+            catch (err) {
+                console.error(err)
+            }
+                        }
+                        catch (err) {
+                            console.log(err)
+                        }
 
-
-
-
+                    }
+                    sellput()
                 }
-
                 else {
-                    alert("No Quantity left")
+                    alert("less than 2 quantity left")
                 }
             });
             listItem.appendChild(sellBtn1);
